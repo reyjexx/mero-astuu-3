@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For Astuu ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    overflow:hidden; height:100vh;
+    background:linear-gradient(135deg,#ff69b4,#ff1493,#ff8c00,#98fb98);
+    background-size:400% 400%; animation:bgMove 15s infinite alternate;
+    color:white; font-family:'Quicksand',sans-serif;
+}
+@keyframes bgMove { 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+.container {
+    position:absolute; width:100%; height:100vh;
+    display:flex; flex-direction:column; justify-content:flex-start;
+    align-items:center; text-align:center; padding-top:12px; z-index:2;
+}
+.hidden { display:none !important; }
+
+/* Lock Screen Tight Spacing */
+#lockScreen h1 { font-size:2.5rem; margin:5px 0 6px 0; text-shadow:0 0 25px pink; }
+#lockScreen p { font-size:1.3rem; margin:5px 0 10px 0; }
+#patternContainer { margin:8px auto 0; }
+
+/* Mobile Friendly Pattern Lock */
+#patternGrid { display:grid; grid-template-columns:repeat(3,92px); gap:16px; }
+.dot { width:92px; height:92px; border-radius:50%; background:rgba(255,255,255,0.25);
+       border:4px solid white; cursor:pointer; transition:all 0.3s; 
+       touch-action: manipulation; }
+.dot.active { background:#ff1493; box-shadow:0 0 30px white, 0 0 50px #ff69b4;
+              animation:pulse 1s infinite; }
+@keyframes pulse { 0%{transform:scale(1.05);} 50%{transform:scale(1.25);} 100%{transform:scale(1.05);} }
+
+/* Other styles */
+.big-name { font-family:'Dancing Script',cursive; font-size:4.8rem; text-shadow:0 0 40px #ff1493; margin:12px 0; }
+.eighteen { font-size:2.4rem; font-weight:bold; color:#fff; text-shadow:0 0 20px #ff1493,0 0 40px #ff69b4;
+            animation:glow 2s infinite alternate; margin:15px 0; }
+@keyframes glow { from{text-shadow:0 0 15px #ff1493;} to{text-shadow:0 0 35px #ff69b4,0 0 50px #ffffff;} }
+button { padding:16px 45px; border:none; border-radius:50px; background:rgba(255,255,255,0.3);
+         color:white; font-size:18px; cursor:pointer; margin:15px; transition:all 0.3s; }
+button:hover { transform:scale(1.08); background:rgba(255,255,255,0.45); }
+#confetti, #hearts { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
+.love-letter { background:rgba(255,255,255,0.18); padding:25px; border-radius:20px; max-width:620px;
+               margin:20px; line-height:1.7; backdrop-filter:blur(10px); }
+
+/* Memory Game - Original */
+#memoryGrid { display:grid; grid-template-columns:repeat(4,70px); gap:12px; margin:20px 0; }
+.memory-card { width:70px; height:70px; perspective:1000px; cursor:pointer; }
+.memory-card-inner { position:relative; width:100%; height:100%; transition:transform 0.7s;
+                     transform-style:preserve-3d; border-radius:16px; }
+.memory-card.flipped .memory-card-inner { transform:rotateY(180deg); }
+.memory-card-front, .memory-card-back {
+    position:absolute; width:100%; height:100%; border-radius:16px;
+    display:flex; align-items:center; justify-content:center; backface-visibility:hidden;
+}
+.memory-card-front { background:rgba(255,255,255,0.25); font-size:38px; }
+.memory-card-back { background:linear-gradient(135deg,#ff1493,#ff69b4,#ffb6c1);
+                    transform:rotateY(180deg); font-size:42px; color:white; }
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div id="confetti"></div>
+
+<!-- LOCK SCREEN -->
+<div class="container" id="lockScreen">
+    <h1>Unlock it first maya ❤️</h1>
+    <p>Draw the letter <strong>"A"</strong> by tapping the dots 💖</p>
+    <div id="patternContainer">
+        <canvas id="lineCanvas" width="310" height="310"></canvas>
+        <div id="patternGrid"></div>
+    </div>
+</div>
+
+<!-- MEMORY GAME -->
+<div class="container hidden" id="memoryScreen">
+    <h1 class="big-name">Astuu</h1>
+    <div class="eighteen">🎉 Happy 18th Birthday! 🎂</div>
+    <p style="margin:10px 0; font-size:1.25rem;">tiny memory game for my cute gold fish 💕</p>
+    <div id="memoryGrid"></div>
+</div>
+
+<!-- ARROW SCREEN -->
+<div class="container hidden" id="arrowScreen">
+    <h1 id="typing" style="min-height:70px; font-size:1.9rem;"></h1>
+    <div id="target" style="font-size:150px; margin:20px 0;">🎁</div>
+    <button onclick="shootArrow()">Shoot Arrow For Guu 🏹</button>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="container hidden" id="finalScreen">
+    <h1 class="big-name">Happy 18th Birthday Astuu ❤️</h1>
+    <div class="eighteen" style="font-size:2.6rem; margin:15px 0;">Welcome to adulthood, My Love ✨</div>
+    <div class="love-letter">
+        <p>My dearest Astuu,<br><br>You are the prettiest and brightest part of my life.<br>Every moment with you feels like magic.<br><br>Sadhai khusi hunu hai.<br>Ma sadhai timi sanga nai xu. ❤️<br><br>I love you so much <strong>M A Y A L U</strong> ✨<br>— Yours forever, Dipjal 💕</p>
+    </div>
+    <button onclick="playVoice()">Play My Voice Message 🎤</button>
+</div>
+
+<audio id="music" loop></audio>
+<audio id="voice" preload="auto"></audio>
+<audio id="unlock" src="https://assets.mixkit.co/sfx/preview/2960/2960.wav"></audio>
+<audio id="shoot" src="https://assets.mixkit.co/sfx/preview/2965/2965.wav"></audio>
+
+<script>
+// CONFIG
+const musicUrl = "https://files.catbox.moe/dd72us.m4a";
+const voiceUrl = "https://files.catbox.moe/bd9lgz.m4a";
+const correctPattern = [1,4,7,5,3,6,9];
+let pattern = [], canvas, ctx, dots = [];
+
+// Hearts
+for(let i=0; i<60; i++){
+    let h = document.createElement("div");
+    h.style.position = "fixed";
+    h.style.fontSize = (22 + Math.random()*32) + "px";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animation = `float ${8 + Math.random()*12}s linear infinite`;
+    h.style.opacity = 0.8;
+    h.innerHTML = "💖";
+    document.getElementById("hearts").appendChild(h);
+}
+
+function createPatternLock(){
+    canvas = document.getElementById("lineCanvas");
+    ctx = canvas.getContext("2d");
+    const grid = document.getElementById("patternGrid");
+    grid.innerHTML = "";
+    dots = [];
+    for(let i=1; i<=9; i++){
+        let dot = document.createElement("div");
+        dot.classList.add("dot");
+        dot.dataset.id = i;
+        dot.addEventListener("click", handleTap);
+        dot.addEventListener("touchstart", (e)=>{e.preventDefault(); handleTap(e);});
+        grid.appendChild(dot);
+        dots.push(dot);
+    }
+}
+
+function handleTap(e){
+    const dot = e.currentTarget || e.target;
+    const id = Number(dot.dataset.id);
+    if(pattern.includes(id)) return;
+    pattern.push(id);
+    dot.classList.add("active");
+    drawLine();
+    if(pattern.length === correctPattern.length){
+        setTimeout(checkPattern, 300);
+    }
+}
+
+function drawLine(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 8;
+    ctx.lineJoin = "round";
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#ff69b4";
+    ctx.beginPath();
+    pattern.forEach((id,i) => {
+        const dot = dots[id-1];
+        const r = dot.getBoundingClientRect();
+        const c = canvas.getBoundingClientRect();
+        const x = r.left - c.left + 46;
+        const y = r.top - c.top + 46;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+}
+
+function checkPattern(){
+    if(JSON.stringify(pattern) === JSON.stringify(correctPattern)){
+        navigator.vibrate?.(200);
+        document.getElementById("unlock").play();
+        unlock();
+    } else {
+        setTimeout(()=>location.reload(),600);
+    }
+}
+
+function unlock(){
+    document.getElementById("lockScreen").classList.add("hidden");
+    document.getElementById("memoryScreen").classList.remove("hidden");
+    document.getElementById("music").src = musicUrl;
+    document.getElementById("music").play().catch(()=>{});
+    createMemoryGame();
+    typeMessage();
+}
+
+// === YOUR ORIGINAL MEMORY GAME AND REST (UNTOUCHED) ===
+let flippedCards = [], matchedPairs = 0;
+function createMemoryGame(){
+    const emojis = ["💖","🌸","🦋","✨","🎀","🐱","🍓","🌟"];
+    let cards = [...emojis, ...emojis].sort(()=>Math.random()-0.5);
+    const grid = document.getElementById("memoryGrid");
+    grid.innerHTML = "";
+    cards.forEach(emoji => {
+        const card = document.createElement("div");
+        card.className = "memory-card";
+        card.innerHTML = `
+            <div class="memory-card-inner">
+                <div class="memory-card-front">❓</div>
+                <div class="memory-card-back">${emoji}</div>
+            </div>
+        `;
+        card.dataset.emoji = emoji;
+        card.onclick = () => flipCard(card);
+        grid.appendChild(card);
+    });
+}
+function flipCard(card){
+    if(flippedCards.length >= 2 || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+    card.classList.add("flipped");
+    flippedCards.push(card);
+    if(flippedCards.length === 2) setTimeout(checkMatch, 700);
+}
+function checkMatch(){
+    const [c1,c2] = flippedCards;
+    if(c1.dataset.emoji === c2.dataset.emoji){
+        c1.classList.add("matched");
+        c2.classList.add("matched");
+        matchedPairs++;
+        if(matchedPairs === 8){
+            setTimeout(() => {
+                document.getElementById("memoryScreen").classList.add("hidden");
+                document.getElementById("arrowScreen").classList.remove("hidden");
+            }, 800);
+        }
+    } else {
+        setTimeout(() => {
+            c1.classList.remove("flipped");
+            c2.classList.remove("flipped");
+        }, 800);
+    }
+    flippedCards = [];
+}
+function typeMessage(){
+    const text = "Every little thing here was made only for you, Astuu 💖";
+    let i = 0;
+    const el = document.getElementById("typing");
+    function type(){
+        if(i < text.length){
+            el.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type,80);
+        }
+    }
+    type();
+}
+window.shootArrow = function(){
+    document.getElementById("shoot").play();
+    document.getElementById("target").innerHTML = "💘";
+    setTimeout(() => {
+        document.getElementById("arrowScreen").classList.add("hidden");
+        document.getElementById("finalScreen").classList.remove("hidden");
+        launchConfetti();
+    },1600);
+};
+function launchConfetti(){
+    for(let i=0;i<200;i++){
+        let c = document.createElement("div");
+        c.style.position = "fixed";
+        c.style.left = Math.random()*100 + "vw";
+        c.style.top = "-30px";
+        c.style.fontSize = "28px";
+        c.textContent = ["💖","🩷","🎊","✨"][Math.floor(Math.random()*4)];
+        c.style.animation = `fall ${3+Math.random()*4}s linear forwards`;
+        document.getElementById("confetti").appendChild(c);
+        setTimeout(()=>c.remove(),10000);
+    }
+}
+window.playVoice = ()=>{
+    const v = document.getElementById("voice");
+    const music = document.getElementById("music");
+    const wasPlaying = !music.paused;
+    v.src = voiceUrl;
+    v.volume = 0.95;
+    v.play().then(() => {
+        if(wasPlaying) music.pause();
+    }).catch((err) => {
+        console.error(err);
+        alert("Voice not playing.\n\nPlease check:\n1. Link ends with .mp3\n2. Try on Chrome browser");
+    });
+};
+
+createPatternLock();
+
+const style = document.createElement("style");
+style.innerHTML = `@keyframes float{from{transform:translateY(100vh)} to{transform:translateY(-120vh)}} @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>
